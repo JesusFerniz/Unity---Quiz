@@ -442,6 +442,16 @@ MonoBehaviour:
       isCorrect: 0
     - option: "Popocat\xE9ptl"
       isCorrect: 0
+  - question: "\xBFCual de estas personas no participa en Karmaland?"
+    options:
+    - option: Alexby
+      isCorrect: 0
+    - option: Rubius
+      isCorrect: 1
+    - option: Lolito
+      isCorrect: 0
+    - option: JordiENP
+      isCorrect: 1
 --- !u!4 &673070639
 Transform:
   m_ObjectHideFlags: 0
