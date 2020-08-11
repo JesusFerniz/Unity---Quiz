@@ -6,10 +6,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public Image timeBar;
-    public float totalTime = 10;
-
-    public TMP_Text scoreLabel;
+    public ScoreSystem scoreSystem;
+    public Timer timer;
 
     public TMP_Text questionLabel;
     public TMP_Text[] optionLabels;
@@ -17,9 +15,11 @@ public class GameManager : MonoBehaviour
     public QuestionData[] questions;
     private int currentQuestionIndex;
 
+    private bool isGameActive;
+
     private void Start()
     {
-        scoreLabel.text = "0";
+        isGameActive = true;
 
         questionLabel.text = questions[0].question;
 
@@ -28,25 +28,49 @@ public class GameManager : MonoBehaviour
             optionLabels[i].text = questions[0].options[i].option;
         }
     }
-    private void Update()
+    public bool IsGameActive()
     {
-        timeBar.fillAmount -= Time.deltaTime / totalTime;
+        return isGameActive;
     }
 
     public void NextQuestion()
     {
         currentQuestionIndex++;
-
-        questionLabel.text = questions[currentQuestionIndex].question;
-
-        for (int i = 0; i < questions[currentQuestionIndex].options.Length; i++)
+        if(currentQuestionIndex < questions.Length)
         {
-            optionLabels[i].text = questions[currentQuestionIndex].options[i].option;
+            timer.RestartTimer();
+
+            questionLabel.text = questions[currentQuestionIndex].question;
+
+            for (int i = 0; i < questions[currentQuestionIndex].options.Length; i++)
+            {
+                optionLabels[i].text = questions[currentQuestionIndex].options[i].option;
+
+            }
+        }
+        else
+        {
+            Debug.Log("Game Over");
+            isGameActive = false;
         }
     }
+
     public void OptionSelected(int index)
     {
-        Debug.Log("Button " + index + "was selected");
+        if(!isGameActive)
+            return;
+
+        //Correct
+        if(questions[currentQuestionIndex].options[index].isCorrect)
+        {
+            scoreSystem.AddPoints(10);
+        }
+        else //Incorrect
+        {
+            scoreSystem.ReducePoints(10);
+        }
+
+        NextQuestion();
     }
 }
 
